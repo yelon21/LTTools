@@ -9,7 +9,7 @@
 #import "UIDevice+LTNet.h"
 
 #import "NSString+LTJson.h"
-#import "NSString+LTValide.h"
+#import "NSString+LTRex.h"
 //local
 #import <ifaddrs.h>
 #import <arpa/inet.h>
@@ -56,7 +56,7 @@ static dispatch_queue_t ip_operation_readwrite_queue() {
 - (NSString *)ltIPaddress{
     
     NSString *ipAddress = objc_getAssociatedObject(self, ltIPaddress);
-    if (!ipAddress||!LTValideIpString(ipAddress)) {
+    if (!ipAddress||![ipAddress lt_isIpString]) {
         
         ipAddress = @"0.0.0.0";
     }
@@ -124,7 +124,7 @@ static dispatch_queue_t ip_operation_readwrite_queue() {
             NSString *ipString = dic[@"data"][@"ip"];
             if (ipString&&[ipString isKindOfClass:[NSString class]]){
             
-                if (LTValideIpString(ipString)) {
+                if ([ipString lt_isIpString]) {
                     
                     refreshDate = [NSDate date];
                     NSLog(@"TB更新时间");

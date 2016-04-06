@@ -11,7 +11,7 @@
 
 @implementation NSData (LTCommon)
 
-- (NSString *)lt_stringValue{
+- (NSString *)lt_stringValueUTF8{
 
     if (self) {
         

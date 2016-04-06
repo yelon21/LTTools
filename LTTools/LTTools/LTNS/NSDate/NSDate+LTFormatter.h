@@ -14,5 +14,7 @@
 
 + (NSString *)LT_currentTimeString;
 
-+ (NSString *)LT_dateString:(NSDate *)date formatter:(NSString *)formatterStr;
+- (NSString *)lt_dateString:(NSString *)formatterStr;
+
++ (NSDate *)LT_date:(NSString *)dateString formatter:(NSString *)formatterStr;
 @end

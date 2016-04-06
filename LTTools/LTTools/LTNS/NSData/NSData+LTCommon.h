@@ -10,7 +10,7 @@
 
 @interface NSData (LTCommon)
 
-- (NSString *)lt_stringValue;
+- (NSString *)lt_stringValueUTF8;
 
 - (NSString *)lt_MD5;
 

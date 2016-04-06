@@ -12,21 +12,31 @@
 
 + (NSString *)LT_currentDateString{
     
-    return [self LT_dateString:[NSDate date] formatter:@"yyyyMMdd"];
+    return [[NSDate date] lt_dateString:@"yyyyMMdd"];
 }
 
 + (NSString *)LT_currentTimeString{
     
-    return [self LT_dateString:[NSDate date] formatter:@"HHmmss"];
+    return [[NSDate date] lt_dateString:@"HHmmss"];
 }
 
-+ (NSString *)LT_dateString:(NSDate *)date formatter:(NSString *)formatterStr{
-    
-    NSTimeZone* GTMzone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
+- (NSString *)lt_dateString:(NSString *)formatterStr{
+
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-    [formatter setTimeZone:GTMzone];
+    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"Asia/Shanghai"]];
+    [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"zh_Hans_CN"]];
     [formatter setDateFormat:formatterStr];
-    NSString *dateStr = [formatter stringFromDate:date];
+    NSString *dateStr = [formatter stringFromDate:self];
     return dateStr;
+}
+
++ (NSDate *)LT_date:(NSString *)dateString formatter:(NSString *)formatterStr{
+
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"Asia/Shanghai"]];
+    [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"zh_Hans_CN"]];
+    [formatter setDateFormat:formatterStr];
+    NSDate *date = [formatter dateFromString:dateString];
+    return date;
 }
 @end

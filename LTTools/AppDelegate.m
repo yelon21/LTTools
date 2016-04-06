@@ -22,7 +22,9 @@
     
     ViewController *viewCon = [[ViewController alloc]init];
     
-    [self.window setRootViewController:viewCon];
+    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:viewCon];
+    
+    [self.window setRootViewController:nav];
     [self.window makeKeyAndVisible];
     return YES;
 }
