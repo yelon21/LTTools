@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
+#import "ContactsUtilVC.h"
 
 @interface AppDelegate ()
 
@@ -20,10 +21,11 @@
     
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     
+//    ContactsUtilVC *viewCon = [[ContactsUtilVC alloc]init];
     ViewController *viewCon = [[ViewController alloc]init];
     
     UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:viewCon];
-    
+    nav.navigationBar.translucent = NO;
     [self.window setRootViewController:nav];
     [self.window makeKeyAndVisible];
     return YES;

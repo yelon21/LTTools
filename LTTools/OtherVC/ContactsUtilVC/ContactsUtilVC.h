@@ -1,13 +1,13 @@
 //
-//  NSListVC.h
+//  ContactsUtilVC.h
 //  LTTools
 //
-//  Created by yelon on 16/4/6.
+//  Created by yelon on 16/4/7.
 //  Copyright © 2016年 yelon. All rights reserved.
 //
 
 #import "BaseViewController.h"
 
-@interface NSListVC : BaseViewController
+@interface ContactsUtilVC : BaseViewController
 
 @end

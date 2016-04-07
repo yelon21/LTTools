@@ -10,6 +10,6 @@
 
 @interface UIDevice (LTUUID)
 
-+ (NSString *)ltUUID_getAppUUID;
++ (NSString *)LT_appUUID;
 
 @end

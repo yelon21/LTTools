@@ -67,7 +67,7 @@ static dispatch_queue_t ip_operation_readwrite_queue() {
 
     dispatch_barrier_async(ip_operation_readwrite_queue(), ^{
         NSError *error = nil;
-        NSURL *ipURL = [NSURL URLWithString:@"http://1111.ip138.com/ic.asp"];
+        NSURL *ipURL = [NSURL URLWithString:@"http://1212.ip138.com/ic.asp"];
         NSString *html = [[NSString alloc]initWithContentsOfURL:ipURL
                                                        encoding:NSASCIIStringEncoding error:&error];
         if (!error&&[html length]>0) {
@@ -127,7 +127,6 @@ static dispatch_queue_t ip_operation_readwrite_queue() {
                 if ([ipString lt_isIpString]) {
                     
                     refreshDate = [NSDate date];
-                    NSLog(@"TB更新时间");
                     [[UIDevice currentDevice]lt_setLTIPaddress:ipString];
                 }
 

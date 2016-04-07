@@ -1,49 +1,42 @@
 //
-//  YLLocation.m
+//  LTLocation.m
 //  LocationTest
 //
 //  Created by yelon on 14-5-5.
 //  Copyright (c) 2014年 yelon. All rights reserved.
 //
 
-#import "YLLocation.h"
-#import <CoreLocation/CoreLocation.h>
+#import "LTLocation.h"
+
 #import "NSObject_define.h"
-#import "LTAlertView.h"
 #import "LTOpenSettings.h"
 #import "GTMBase64.h"
-#ifndef NSLog
-#define NSLog(fmt, ...) nil
-#endif
-@interface YLLocation()<CLLocationManagerDelegate>{
+
+@interface LTLocation()<CLLocationManagerDelegate>{
     
     CLLocationManager *locationManager;
-    LTAlertView *alert;
 }
-@property(nonatomic,retain,readwrite) NSString *latitudeStr;//纬度
-@property(nonatomic,retain,readwrite) NSString *longitudeStr;//经度
-@property(nonatomic,retain,readwrite) NSString *postalCode;
-@property(nonatomic,retain,readwrite) NSString *cityName;//城市
+
+@property(nonatomic,strong,readwrite) NSString *city;
+
+@property(nonatomic,strong,readwrite) CLPlacemark *currentPlacemark;
+
+@property(nonatomic,strong,readwrite) NSString *latitudeBaiDu;//纬度
+@property(nonatomic,strong,readwrite) NSString *longitudeBaiDu;//经度
+@property(nonatomic,strong,readwrite) NSString *briefAddress;//省|市|区|postalCode
+@property(nonatomic,strong,readwrite) NSString *detailAddress;//详细地址
 @end
 
 
-@implementation YLLocation
+@implementation LTLocation
 
-//@synthesize located;
-//@synthesize locateEnable;
-//
-//@synthesize longitudeStr;
-//@synthesize latitudeStr;
-//@synthesize postalCode;
-//@synthesize cityName;
-
-+ (id)sharedYLLocation{
++ (id)sharedLocation{
     
     static dispatch_once_t once;
     static id sharedInstance;
     dispatch_once(&once, ^{
         
-        sharedInstance = [[YLLocation alloc] init];
+        sharedInstance = [[LTLocation alloc] init];
     });
     return sharedInstance;
 }
@@ -75,11 +68,10 @@
         locationManager.distanceFilter = 10.0;
         [locationManager startUpdatingLocation];
         
-        self.latitudeStr = @"0.0";
-        self.longitudeStr = @"0.0";
+        self.latitudeBaiDu = @"0.0";
+        self.longitudeBaiDu = @"0.0";
         self.detailAddress = @"";
-        self.postalCode = @"|||";
-        self.cityName = @"";
+        self.briefAddress = @"|||";
     }
     
     return self;
@@ -103,9 +95,10 @@
 
 - (void)didGetNewLocation:(CLLocation *)location{
     
-    CLLocation *newLocation = location;//[YLLocation transformToMars:location];
-    self.longitudeStr = [NSString stringWithFormat:@"%@",@(newLocation.coordinate.longitude)];
-    self.latitudeStr = [NSString stringWithFormat:@"%@",@(newLocation.coordinate.latitude)];
+    CLLocation *newLocation = location;//[LTLocation transformToMars:location];
+    
+    self.longitudeBaiDu = [NSString stringWithFormat:@"%@",@(newLocation.coordinate.longitude)];
+    self.latitudeBaiDu = [NSString stringWithFormat:@"%@",@(newLocation.coordinate.latitude)];
     //转百度
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -120,7 +113,8 @@
             
             return ;
         }
-        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding]
+                                                            options:NSJSONReadingMutableContainers error:nil];
         
         dispatch_sync(dispatch_get_main_queue(), ^{
             
@@ -132,13 +126,11 @@
                     NSString *yEnc = dic[@"y"];
                     
                     
-                    self.longitudeStr = [[NSString alloc]initWithData:[GTMBase64 decodeString:xEnc] encoding:NSUTF8StringEncoding];
-                    self.latitudeStr = [[NSString alloc]initWithData:[GTMBase64 decodeString:yEnc] encoding:NSUTF8StringEncoding];
-                    //                    [NSString stringWithCString:[GTMBase64 decodeString:xEnc].bytes encoding:NSASCIIStringEncoding];
-                    //                    self.latitudeStr = [NSString stringWithCString:[GTMBase64 decodeString:yEnc].bytes encoding:NSASCIIStringEncoding];
+                    self.longitudeBaiDu = [[NSString alloc]initWithData:[GTMBase64 decodeString:xEnc] encoding:NSUTF8StringEncoding];
+                    self.latitudeBaiDu = [[NSString alloc]initWithData:[GTMBase64 decodeString:yEnc] encoding:NSUTF8StringEncoding];
                 }
             }
-            NSLog(@"longitudeStr == %@,%@",_latitudeStr,_longitudeStr);
+            NSLog(@"longitudeStr == %@,%@",_latitudeBaiDu,_longitudeBaiDu);
         });
     });
     
@@ -148,49 +140,45 @@
     [geocoder reverseGeocodeLocation:newLocation
                    completionHandler:^(NSArray *placemarks, NSError *error) {
                        
-//                       [self showPlaceMarks:placemarks];
-                       
+                       [self showPlaceMarks:placemarks];
+  
                        if ([placemarks count]>0) {
                            
-                           CLPlacemark *placeMark = [placemarks lastObject];
+                           CLPlacemark *placemark = [placemarks lastObject];
+                           self.currentPlacemark = placemark;
                            
-                           NSMutableString *addressStr = [[NSMutableString alloc]initWithString:@""];
+                           NSString *detailAddress = nil;
                            
-                           NSArray *addressLines = [placeMark.addressDictionary objectForKey:@"FormattedAddressLines"];
-                           if ([addressLines count]>0) {
+                           if ([placemark.name length]>0){
                                
-                               [addressStr setString:[addressLines lastObject]];
+                               NSLog(@"name=%@",placemark.name);
+                               detailAddress = placemark.name;
                            }
-                           
-                           if ([placeMark.name length] < 10) {
+                           else {
                                
-                               NSString *str = [NSString stringWithFormat:@"%@(%@)",addressStr,placeMark.name];
-                               [addressStr setString:str];
+                               NSArray *addressLines = [placemark.addressDictionary objectForKey:@"FormattedAddressLines"];
+                               
+                               if ([addressLines count]>0){
+                               
+                                   detailAddress = [addressLines lastObject];
+                               }
                            }
-                           
-//                           if (address) {
-//
-//                               [address release];
-//                           }
-                           
-                           
-                           [addressStr setString:[NSString stringWithFormat:@"%@%@%@",placeMark.locality,placeMark.subLocality,placeMark.thoroughfare]];
-                           if (![placeMark.subThoroughfare isKindOfClass:[NSNull class]] && ![placeMark.subThoroughfare isEqualToString:@""] && placeMark.subThoroughfare != NULL) {
-                               [addressStr setString:[NSString stringWithFormat:@"%@%@%@%@",placeMark.locality,placeMark.subLocality,placeMark.thoroughfare,placeMark.subThoroughfare]];
+    
+                           if ([detailAddress hasPrefix:@"中国"]) {
+                               
+                               detailAddress = [detailAddress substringFromIndex:2];
                            }
-                           
-                           self.detailAddress = addressStr;
-                           NSLog(@"address == %@",self.detailAddress);
+                           self.detailAddress = detailAddress;
+                           NSLog(@"detailAddress == %@",self.detailAddress);
                            
                            if (self.detailAddress) {
                                [[NSNotificationCenter defaultCenter] postNotificationName:@"updateLocation" object:nil];
-                               
                            }
                            
-                           NSString *state = [placeMark.addressDictionary objectForKey:@"State"];
-                           NSString *city  = [placeMark.addressDictionary objectForKey:@"City"];
-                           NSString *subCity = placeMark.subLocality;
-                           NSString *code  = placeMark.postalCode;
+                           NSString *state = [self.currentPlacemark.addressDictionary objectForKey:@"State"];
+                           NSString *city  = [self.currentPlacemark.addressDictionary objectForKey:@"City"];
+                           NSString *subCity = self.currentPlacemark.subLocality;
+                           NSString *code  = self.currentPlacemark.postalCode;
                            
                            if (!city) {
                                
@@ -205,16 +193,16 @@
                                code = @"";
                            }
 
-                           self.postalCode = [NSString stringWithFormat:@"%@|%@|%@|%@",state,city,subCity,code];
-                           NSLog(@"postalCode == %@",self.postalCode);
+                           self.briefAddress = [NSString stringWithFormat:@"%@|%@|%@|%@",state,city,subCity,code];
+                           NSLog(@"postalCode == %@",self.briefAddress);
                            
                            if (city==nil||[city isEqualToString:@""]) {
                                
-                               self.cityName = [[NSString alloc]initWithFormat:@"%@",state];
+                               self.city = state;
                            }
                            else{
                                
-                               self.cityName = [[NSString alloc]initWithFormat:@"%@",city];
+                               self.city = city;
                            }
                        }
                    }];
@@ -245,15 +233,7 @@
 
 - (void)didLocationServiceOff{
     
-    NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"];
-    
-    alert = [[LTAlertView alloc]initWithAlertType:YES
-                                            title:[NSString stringWithFormat:@"请打开该%@的定位服务",appName]
-                                          message:[NSString stringWithFormat:@"位于：【设置】-【隐私】-【定位服务】-【%@】",appName]
-                                cancelButtonTitle:@"知道了"
-                                otherButtonTitles:nil];
-    NSString *title = [alert showAlert];
-    NSLog(@"title==%@",title);
+    NSLog(@"定位服务未开启");
     LTOpenSettingsURLString(LTSettingsLocationURLString);
 }
 
@@ -261,14 +241,7 @@
     
     if ([self locateEnable]) {
         
-        if ([self.latitudeStr doubleValue] == 0.0 || [self.longitudeStr doubleValue] == 0.0) {
-            
-            alert = [[LTAlertView alloc]initWithAlertType:YES
-                                                    title:@"提示"
-                                                  message:@"正在定位，请稍后重试!"
-                                        cancelButtonTitle:@"知道了"
-                                        otherButtonTitles:nil];
-            [alert showAlert];
+        if ([self.latitudeBaiDu doubleValue] == 0.0 || [self.longitudeBaiDu doubleValue] == 0.0) {
             
             return NO;
         }
@@ -276,7 +249,6 @@
             
             return YES;
         }
-        
     }
     else{
         
@@ -365,7 +337,7 @@ const double ee = 0.00669342162296594323;
 }
 
 + (double)transformLatWithX:(double)x y:(double)y {
-    double ret = -100.0 + 2.0 * x + 3.0 * y + 0.2 * y * y + 0.1 * x * y + 0.2 * sqrt(abs(x));
+    double ret = -100.0 + 2.0 * x + 3.0 * y + 0.2 * y * y + 0.1 * x * y + 0.2 * sqrt(fabs(x));
     ret += (20.0 * sin(6.0 * x * M_PI) + 20.0 * sin(2.0 * x * M_PI)) * 2.0 / 3.0;
     ret += (20.0 * sin(y * M_PI) + 40.0 * sin(y / 3.0 * M_PI)) * 2.0 / 3.0;
     ret += (160.0 * sin(y / 12.0 * M_PI) + 320 * sin(y * M_PI / 30.0)) * 2.0 / 3.0;
@@ -373,7 +345,7 @@ const double ee = 0.00669342162296594323;
 }
 
 + (double)transformLonWithX:(double)x y:(double)y {
-    double ret = 300.0 + x + 2.0 * y + 0.1 * x * x + 0.1 * x * y + 0.1 * sqrt(abs(x));
+    double ret = 300.0 + x + 2.0 * y + 0.1 * x * x + 0.1 * x * y + 0.1 * sqrt(fabs(x));
     ret += (20.0 * sin(6.0 * x * M_PI) + 20.0 * sin(2.0 * x * M_PI)) * 2.0 / 3.0;
     ret += (20.0 * sin(x * M_PI) + 40.0 * sin(x / 3.0 * M_PI)) * 2.0 / 3.0;
     ret += (150.0 * sin(x / 12.0 * M_PI) + 300.0 * sin(x / 30.0 * M_PI)) * 2.0 / 3.0;
@@ -398,9 +370,6 @@ const double ee = 0.00669342162296594323;
         NSLog(@"ISOcountryCode=%@",placeMark.ISOcountryCode);
         NSLog(@"country=%@",placeMark.country);
         
-        
-        //                           @property (nonatomic, readonly) NSDictionary *addressDictionary;
-        
         NSDictionary *addressDic = placeMark.addressDictionary;
         
         NSArray *keyArray = [addressDic allKeys];
@@ -414,15 +383,6 @@ const double ee = 0.00669342162296594323;
                 NSLog(@"%@ == %@",key,[addressDic objectForKey:key]);
             }
         }
-        //                           [self.searchGeocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
-        //                               if (error == nil && [placemarks count] > 0) {
-        //                                   NSString *currentCityName = [[placemarks objectAtIndex:0] locality];
-        //                                   if (currentCityName == nil) {
-        //                                       currentCityName = [[[placemarks objectAtIndex:0] addressDictionary] objectForKey:@"State"];
-        //                                   }
-        //                                   completionHandler(currentCityName);
-        //                               }
-        //                           }];
     }
 }
 

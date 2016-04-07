@@ -24,13 +24,13 @@
     
     [super viewDidLoad];
     
-    self.navigationItem.leftBarButtonItem = [UIBarButtonItem LT_item:@"nav_close"
-                                                           highlight:nil
+    self.navigationItem.leftBarButtonItem = [UIBarButtonItem LT_item:@"X"
+                                                               color:[UIColor blackColor]
                                                               target:self
                                                                  sel:@selector(leftAction)];
     
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem LT_item:@"确定"
-                                                                color:[UIColor whiteColor]
+                                                                color:[UIColor blackColor]
                                                                target:self
                                                                   sel:@selector(rightAction)];
     

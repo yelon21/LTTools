@@ -14,4 +14,5 @@
                          sourceArray:(NSArray *)sourceArray
                             selected:(void(^)(BOOL cancel,id obj))selectedBlock;
 
+#define LTPickerView_Title @"title"
 @end

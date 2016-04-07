@@ -11,4 +11,5 @@
 
 @interface BaseViewController : UIViewController
 
+@property(nonatomic,strong)NSString *key;
 @end

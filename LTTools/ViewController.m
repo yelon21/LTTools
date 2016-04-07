@@ -22,7 +22,11 @@
    
     [super viewDidLoad];
     
-    listArray = [LTPlistReader LT_getDictionary:@"ListKind" forKey:@"Root"];
+    if (!self.key) {
+        self.key = @"Root";
+    }
+    
+    listArray = [LTPlistReader LT_getDictionary:@"ListKind" forKey:self.key];
 
     self.tableView = [[UITableView alloc]initWithFrame:self.view.bounds];
     self.tableView.delegate = self;
@@ -59,7 +63,10 @@
     if (classString) {
         
         Class class = NSClassFromString(classString);
-        UIViewController *viewCon = [[class alloc]init];
+        ViewController *viewCon = [[class alloc]init];
+        if ([viewCon isKindOfClass:[ViewController class]]) {
+            viewCon.key = dic[@"key"];
+        }
         [self.navigationController pushViewController:viewCon animated:YES];
     }
 }

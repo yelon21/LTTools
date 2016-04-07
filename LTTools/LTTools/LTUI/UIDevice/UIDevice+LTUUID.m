@@ -11,8 +11,7 @@
 
 @implementation UIDevice (LTUUID)
 
-+ (NSString *)ltUUID_getAppUUID
-{
++ (NSString *)LT_appUUID{
     
     NSString *bundleId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
     NSString *retrieveuuid = [SSKeychain passwordForService:bundleId

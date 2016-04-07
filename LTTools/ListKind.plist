@@ -8,19 +8,25 @@
 			<key>title</key>
 			<string>NS</string>
 			<key>class</key>
-			<string>NSListVC</string>
+			<string>ViewController</string>
+			<key>key</key>
+			<string>NSList</string>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>UI</string>
 			<key>class</key>
-			<string>NSListVC</string>
+			<string>ViewController</string>
+			<key>key</key>
+			<string>UIList</string>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>Other</string>
 			<key>class</key>
-			<string>NSListVC</string>
+			<string>ViewController</string>
+			<key>key</key>
+			<string>OtherList</string>
 		</dict>
 	</array>
 	<key>NSList</key>
@@ -42,6 +48,33 @@
 			<string>NSString+LTRex</string>
 			<key>class</key>
 			<string>NSStringVC</string>
+		</dict>
+	</array>
+	<key>OtherList</key>
+	<array>
+		<dict>
+			<key>title</key>
+			<string>LTContactsUIUtil</string>
+			<key>class</key>
+			<string>ContactsUIUtilVC</string>
+		</dict>
+		<dict>
+			<key>title</key>
+			<string>LTContactsUtil</string>
+			<key>class</key>
+			<string>ContactsUtilVC</string>
+		</dict>
+		<dict>
+			<key>title</key>
+			<string>LTInstallProcess</string>
+			<key>class</key>
+			<string>InstallProcessLV</string>
+		</dict>
+		<dict>
+			<key>title</key>
+			<string>LTPickerView</string>
+			<key>class</key>
+			<string>PickerViewVC</string>
 		</dict>
 	</array>
 </dict>
