@@ -72,7 +72,7 @@
     configuration.userContentController = [[WKUserContentController alloc]init];
     
     self.webViewWK = [[WKWebView alloc]initWithFrame:self.bounds
-                                 configuration:configuration];
+                                       configuration:configuration];
     self.webViewWK.UIDelegate = self;
     self.webViewWK.navigationDelegate = self;
     
@@ -82,7 +82,7 @@
 }
 
 - (void)initUIWebView{
-
+    
     self.webViewUI = [[UIWebView alloc]initWithFrame:self.bounds];
     self.webViewUI.delegate = self;
     [self.rootScrollView addSubview:self.webViewUI];
@@ -91,19 +91,19 @@
 }
 // 成员方法
 -(UIView *)webView{
-
+    
     if (self.isWKWebView) {
         
         return self.webViewWK;
     }
     else{
-    
+        
         return self.webViewUI;
     }
 }
 //加载
 - (void)lt_loadUrl:(NSString *)urlString{
-
+    
     NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     if (!url) {
         
@@ -115,7 +115,7 @@
 }
 
 -(void)lt_loadRequest:(NSURLRequest *)request{
-
+    
     if (self.isWKWebView) {
         
         [self.webViewWK loadRequest:request];
@@ -127,7 +127,7 @@
 }
 
 -(void)lt_loadHTMLString:(NSString *)string baseURL:(NSURL *)baseURL{
-
+    
     if (self.isWKWebView) {
         
         [self.webViewWK loadHTMLString:string baseURL:baseURL];
@@ -139,7 +139,7 @@
 }
 
 -(void)lt_loadData:(NSData *)data MIMEType:(NSString *)MIMEType textEncodingName:(NSString *)textEncodingName baseURL:(NSURL *)baseURL{
-
+    
     if (self.isWKWebView) {
         
         if ([self.webViewWK respondsToSelector:@selector(loadData:MIMEType:characterEncodingName:baseURL:)]) {//9.0
@@ -154,18 +154,18 @@
 }
 //属性 readonly
 -(NSURL *)URL{
-
+    
     if (self.isWKWebView) {
         
         return self.webViewWK.URL;
     }
     else{
-    
+        
         return self.webViewUI.request.URL;
     }
 }
 -(UIScrollView *)scrollView{
-
+    
     if (self.isWKWebView) {
         
         return self.webViewWK.scrollView;
@@ -177,7 +177,7 @@
 }
 
 -(BOOL)canGoBack{
-
+    
     if (self.isWKWebView) {
         
         return self.webViewWK.canGoBack;
@@ -189,7 +189,7 @@
 }
 
 -(BOOL)canGoForward{
-
+    
     if (self.isWKWebView) {
         
         return self.webViewWK.canGoForward;
@@ -201,7 +201,7 @@
 }
 
 -(BOOL)isLoading{
-
+    
     if (self.isWKWebView) {
         
         return self.webViewWK.isLoading;
@@ -216,11 +216,11 @@
     
     if (self.isWKWebView) {
         
-         [self.webViewWK reload];
+        [self.webViewWK reload];
     }
     else{
         
-         [self.webViewUI reload];
+        [self.webViewUI reload];
     }
 }
 - (void)lt_stopLoading{
@@ -268,12 +268,14 @@
     else{
         
         NSString *result = [self.webViewUI stringByEvaluatingJavaScriptFromString:javaScriptString];
-        completionHandler(result,nil);
+        if (completionHandler) {
+            completionHandler(result,nil);
+        }
     }
 }
 #pragma mark LTWebViewDelegate
 - (void)lt_webViewDidStartLoad:(UIView *)webView {
-
+    
     if ([self.delegate respondsToSelector:@selector(ltwebViewDidStartLoad:)]) {
         
         [self.delegate ltwebViewDidStartLoad:self];
@@ -308,8 +310,8 @@
     if ([self.delegate respondsToSelector:@selector(ltwebView:shouldStartLoadWithRequest:navigationType:)]) {
         
         return [self.delegate ltwebView:self
-      shouldStartLoadWithRequest:request
-                  navigationType:navigationType];
+             shouldStartLoadWithRequest:request
+                         navigationType:navigationType];
     }
     return YES;
 }
@@ -337,14 +339,14 @@
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
-
+    
     return [self lt_webView:webView
-shouldStartLoadWithRequest:request
-      navigationType:navigationType];
+ shouldStartLoadWithRequest:request
+             navigationType:navigationType];
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(nullable NSError *)error{
-
+    
     [self lt_webView:webView didFailLoadWithError:error];
 }
 
@@ -352,14 +354,14 @@ shouldStartLoadWithRequest:request
 /*! @abstract 决定是否允许或者取消一个navigationAction
  @discussion If you do not implement this method, the web view will load the request or, if appropriate, forward it to another application.
  */
-//- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler{
-//    
-//    NSLog(@"决定是否允许=%@",navigationAction.request);
-//    BOOL allow = [self lt_webView:webView
-//       shouldStartLoadWithRequest:navigationAction.request
-//                   navigationType:(NSInteger)navigationAction.navigationType];
-//    decisionHandler(allow);
-//}
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler{
+    
+    NSLog(@"决定是否允许=%@",navigationAction.request);
+    BOOL allow = [self lt_webView:webView
+       shouldStartLoadWithRequest:navigationAction.request
+                   navigationType:(NSInteger)navigationAction.navigationType];
+    decisionHandler(allow);
+}
 
 /*! @abstract 判定在获取确定响应后是否允许导航
  @discussion 如果你不实现,如果webview能够显示， webview将允许响应.
@@ -406,11 +408,6 @@ shouldStartLoadWithRequest:request
     NSLog(@"加载完成");
     self.title = webView.title;
     
-//    [webView evaluateJavaScript:@"document.title"
-//                           completionHandler:^(id _Nullable obj, NSError * _Nullable error) {
-//                               
-//                               self.title = obj;
-//                           }];
     [self lt_webViewDidFinishLoad:webView];
 }
 
@@ -425,10 +422,10 @@ shouldStartLoadWithRequest:request
 /*! @abstract webview 需要证书校验
  @discussion If you do not implement this method, the web view will respond to the authentication challenge with the NSURLSessionAuthChallengeRejectProtectionSpace disposition.
  */
-- (void)webView:(WKWebView *)webView didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *__nullable credential))completionHandler{
-    
-    NSLog(@"需要证书校验");
-}
+//- (void)webView:(WKWebView *)webView didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *__nullable credential))completionHandler{
+//
+//    NSLog(@"需要证书校验");
+//}
 
 /*! @abstract webview 内容处理终止
  */
@@ -480,10 +477,26 @@ shouldStartLoadWithRequest:request
  If you do not implement this method, the web view will behave as if the user selected the OK button.
  */
 
-//- (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler{
-//    NSLog(@"alert=%@",message);
-//    
-//}
+- (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler{
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
+                                                                   message:message
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+        completionHandler();
+    }];
+
+    [alert addAction:action];
+    
+    UIViewController *viewCon = (UIViewController *)self.delegate;
+    if (![viewCon isKindOfClass:[UIViewController class]]) {
+        
+        viewCon = [UIApplication sharedApplication].keyWindow.rootViewController;
+    }
+    [viewCon presentViewController:alert animated:YES completion:nil];
+}
 
 /*! @abstract 显示js confirm
  
@@ -494,9 +507,31 @@ shouldStartLoadWithRequest:request
  
  If you do not implement this method, the web view will behave as if the user selected the Cancel button.
  */
-//- (void)webView:(WKWebView *)webView runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL result))completionHandler{
-//    NSLog(@"confirm=%@",message);
-//}
+- (void)webView:(WKWebView *)webView runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL result))completionHandler{
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
+                                                                   message:message
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+        completionHandler(NO);
+    }];
+    UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        completionHandler(YES);
+    }];
+    
+    [alert addAction:actionCancel];
+    [alert addAction:actionConfirm];
+    
+    UIViewController *viewCon = (UIViewController *)self.delegate;
+    if (![viewCon isKindOfClass:[UIViewController class]]) {
+        
+        viewCon = [UIApplication sharedApplication].keyWindow.rootViewController;
+    }
+    [viewCon presentViewController:alert animated:YES completion:nil];
+}
 
 /*! @abstract 显示js input panel.
  @param webView The web view invoking the delegate method.
@@ -514,10 +549,38 @@ shouldStartLoadWithRequest:request
  
  If you do not implement this method, the web view will behave as if the user selected the Cancel button.
  */
-//- (void)webView:(WKWebView *)webView runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt defaultText:(nullable NSString *)defaultText initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(NSString * __nullable result))completionHandler{
-//    
-//    NSLog(@"prompt=%@",prompt);
-//}
+- (void)webView:(WKWebView *)webView runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt defaultText:(nullable NSString *)defaultText initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(NSString * __nullable result))completionHandler{
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
+                                                                   message:prompt
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+        completionHandler(nil);
+    }];
+    UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        NSString *input = ((UITextField *)alert.textFields.firstObject).text;
+        completionHandler(input);
+    }];
+    
+    [alert addAction:actionCancel];
+    [alert addAction:actionConfirm];
+    
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        
+        textField.placeholder = defaultText;
+        textField.secureTextEntry = ([prompt rangeOfString:@"密码"].location != NSNotFound || [defaultText rangeOfString:@"密码"].location != NSNotFound);
+    }];
+    
+    UIViewController *viewCon = (UIViewController *)self.delegate;
+    if (![viewCon isKindOfClass:[UIViewController class]]) {
+        
+        viewCon = [UIApplication sharedApplication].keyWindow.rootViewController;
+    }
+    [viewCon presentViewController:alert animated:YES completion:nil];
+}
 
 
 @end

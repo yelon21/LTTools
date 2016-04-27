@@ -9,29 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "LTTools/LTTools/LTOther/LTLocation/LTLocation.m"
-            timestampString = "481722859.461176"
+            filePath = "LTTools/LTTools/LTUI/LTView/LTWebView/LTWebView.m"
+            timestampString = "483361742.067606"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "172"
-            endingLineNumber = "172"
-            landmarkName = "-didGetNewLocation:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LTTools/AppDelegate.m"
-            timestampString = "481725458.460306"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "29"
-            endingLineNumber = "29"
-            landmarkName = "-application:didFinishLaunchingWithOptions:"
+            startingLineNumber = "482"
+            endingLineNumber = "482"
+            landmarkName = "-webView:runJavaScriptAlertPanelWithMessage:initiatedByFrame:completionHandler:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

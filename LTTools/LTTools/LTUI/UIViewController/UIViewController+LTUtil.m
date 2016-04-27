@@ -12,10 +12,10 @@
 
 - (void)lt_setNavBackItem{
     
-    self.navigationItem.leftBarButtonItem = [UIBarButtonItem LT_item:@"nav_back"
-                                                        highlight:nil
-                                                           target:self
-                                                              sel:@selector(lt_popToLastVC)];
+    self.navigationItem.leftBarButtonItem = [UIBarButtonItem LT_item:@"<"
+                                                               color:[UIColor blackColor]
+                                                              target:self
+                                                                 sel:@selector(lt_popToLastVC)];
 }
 
 - (void)lt_popToLastVC{
@@ -23,11 +23,10 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-
 - (void)lt_setPresentedVCBackItem{
     
-    self.navigationItem.leftBarButtonItem = [UIBarButtonItem LT_item:@"nav_close"
-                                                           highlight:nil
+    self.navigationItem.leftBarButtonItem = [UIBarButtonItem LT_item:@"X"
+                                                               color:[UIColor blackColor]
                                                               target:self
                                                                  sel:@selector(lt_dismissToLastVC)];
 }

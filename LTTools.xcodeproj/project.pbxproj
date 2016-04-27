@@ -48,7 +48,7 @@
 		634485711CB4DB310095175D /* UIDevice+LTNet.m in Sources */ = {isa = PBXBuildFile; fileRef = 6344853D1CB4DB310095175D /* UIDevice+LTNet.m */; };
 		634485721CB4DB310095175D /* UIDevice+LTUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 6344853F1CB4DB310095175D /* UIDevice+LTUUID.m */; };
 		634485731CB4DB310095175D /* wwanconnect.c in Sources */ = {isa = PBXBuildFile; fileRef = 634485401CB4DB310095175D /* wwanconnect.c */; };
-		634485741CB4DB310095175D /* YLIOFlowBytes.m in Sources */ = {isa = PBXBuildFile; fileRef = 634485431CB4DB310095175D /* YLIOFlowBytes.m */; };
+		634485741CB4DB310095175D /* LTIOFlowBytes.m in Sources */ = {isa = PBXBuildFile; fileRef = 634485431CB4DB310095175D /* LTIOFlowBytes.m */; };
 		634485751CB4DB310095175D /* UIImage+LTCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 634485461CB4DB310095175D /* UIImage+LTCommon.m */; };
 		634485761CB4DB310095175D /* UIView+LTCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 634485491CB4DB310095175D /* UIView+LTCommon.m */; };
 		634485771CB4DB310095175D /* UIView+LTTransform.m in Sources */ = {isa = PBXBuildFile; fileRef = 6344854B1CB4DB310095175D /* UIView+LTTransform.m */; };
@@ -61,6 +61,7 @@
 		634485901CB537D50095175D /* NSString+LTRex.m in Sources */ = {isa = PBXBuildFile; fileRef = 6344858F1CB537D50095175D /* NSString+LTRex.m */; };
 		634485941CB547F10095175D /* NSStringVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 634485931CB547F10095175D /* NSStringVC.m */; };
 		634485961CB549D10095175D /* NSStringVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 634485951CB549D10095175D /* NSStringVC.xib */; };
+		635162831CCF7F0A00A65BEF /* LTWebViewVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 635162821CCF7F0A00A65BEF /* LTWebViewVC.m */; };
 		63C61E361CB622D20023799A /* ContactsUIUtilVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C61E341CB622D20023799A /* ContactsUIUtilVC.m */; };
 		63C61E371CB622D20023799A /* ContactsUIUtilVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 63C61E351CB622D20023799A /* ContactsUIUtilVC.xib */; };
 		63C61E3A1CB62AC20023799A /* ContactsUtilVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C61E391CB62AC20023799A /* ContactsUtilVC.m */; };
@@ -177,8 +178,8 @@
 		6344853F1CB4DB310095175D /* UIDevice+LTUUID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+LTUUID.m"; sourceTree = "<group>"; };
 		634485401CB4DB310095175D /* wwanconnect.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = wwanconnect.c; sourceTree = "<group>"; };
 		634485411CB4DB310095175D /* wwanconnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wwanconnect.h; sourceTree = "<group>"; };
-		634485421CB4DB310095175D /* YLIOFlowBytes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLIOFlowBytes.h; sourceTree = "<group>"; };
-		634485431CB4DB310095175D /* YLIOFlowBytes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLIOFlowBytes.m; sourceTree = "<group>"; };
+		634485421CB4DB310095175D /* LTIOFlowBytes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTIOFlowBytes.h; sourceTree = "<group>"; };
+		634485431CB4DB310095175D /* LTIOFlowBytes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTIOFlowBytes.m; sourceTree = "<group>"; };
 		634485451CB4DB310095175D /* UIImage+LTCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+LTCommon.h"; sourceTree = "<group>"; };
 		634485461CB4DB310095175D /* UIImage+LTCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+LTCommon.m"; sourceTree = "<group>"; };
 		634485481CB4DB310095175D /* UIView+LTCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+LTCommon.h"; sourceTree = "<group>"; };
@@ -200,6 +201,8 @@
 		634485921CB547F10095175D /* NSStringVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringVC.h; sourceTree = "<group>"; };
 		634485931CB547F10095175D /* NSStringVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringVC.m; sourceTree = "<group>"; };
 		634485951CB549D10095175D /* NSStringVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NSStringVC.xib; sourceTree = "<group>"; };
+		635162811CCF7F0A00A65BEF /* LTWebViewVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTWebViewVC.h; sourceTree = "<group>"; };
+		635162821CCF7F0A00A65BEF /* LTWebViewVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTWebViewVC.m; sourceTree = "<group>"; };
 		63C61E331CB622D20023799A /* ContactsUIUtilVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsUIUtilVC.h; sourceTree = "<group>"; };
 		63C61E341CB622D20023799A /* ContactsUIUtilVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsUIUtilVC.m; sourceTree = "<group>"; };
 		63C61E351CB622D20023799A /* ContactsUIUtilVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactsUIUtilVC.xib; sourceTree = "<group>"; };
@@ -636,8 +639,8 @@
 				6344853F1CB4DB310095175D /* UIDevice+LTUUID.m */,
 				634485401CB4DB310095175D /* wwanconnect.c */,
 				634485411CB4DB310095175D /* wwanconnect.h */,
-				634485421CB4DB310095175D /* YLIOFlowBytes.h */,
-				634485431CB4DB310095175D /* YLIOFlowBytes.m */,
+				634485421CB4DB310095175D /* LTIOFlowBytes.h */,
+				634485431CB4DB310095175D /* LTIOFlowBytes.m */,
 			);
 			path = UIDevice;
 			sourceTree = "<group>";
@@ -695,6 +698,7 @@
 		6344857B1CB4DBC40095175D /* UIVC */ = {
 			isa = PBXGroup;
 			children = (
+				635162801CCF7EF800A65BEF /* LTWebViewVC */,
 			);
 			path = UIVC;
 			sourceTree = "<group>";
@@ -725,6 +729,15 @@
 				634485951CB549D10095175D /* NSStringVC.xib */,
 			);
 			path = NSStringVC;
+			sourceTree = "<group>";
+		};
+		635162801CCF7EF800A65BEF /* LTWebViewVC */ = {
+			isa = PBXGroup;
+			children = (
+				635162811CCF7F0A00A65BEF /* LTWebViewVC.h */,
+				635162821CCF7F0A00A65BEF /* LTWebViewVC.m */,
+			);
+			path = LTWebViewVC;
 			sourceTree = "<group>";
 		};
 		63C61E311CB622B70023799A /* ContactsUIUtilVC */ = {
@@ -978,7 +991,7 @@
 				6344856F1CB4DB310095175D /* UIColor+LTCommon.m in Sources */,
 				634485891CB4F5050095175D /* NSDataVC.m in Sources */,
 				6344855D1CB4DB310095175D /* LTContactsUtil.m in Sources */,
-				634485741CB4DB310095175D /* YLIOFlowBytes.m in Sources */,
+				634485741CB4DB310095175D /* LTIOFlowBytes.m in Sources */,
 				634485531CB4DB310095175D /* NSString+LTEncryption.m in Sources */,
 				6344855E1CB4DB310095175D /* LTInstallProcess.m in Sources */,
 				63C61E4B1CB64FB40023799A /* LTContactsInfo.m in Sources */,
@@ -999,6 +1012,7 @@
 				634485671CB4DB310095175D /* LTSMSButton.m in Sources */,
 				634485651CB4DB310095175D /* LTRequest.m in Sources */,
 				634485701CB4DB310095175D /* UIDevice+LTCommon.m in Sources */,
+				635162831CCF7F0A00A65BEF /* LTWebViewVC.m in Sources */,
 				6344855F1CB4DB310095175D /* LTLocation.m in Sources */,
 				6344858D1CB4F7D40095175D /* NSDateVC.m in Sources */,
 				6344856A1CB4DB310095175D /* LTCipherText.m in Sources */,
