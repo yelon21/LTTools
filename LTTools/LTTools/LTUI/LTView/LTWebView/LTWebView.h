@@ -45,7 +45,6 @@
 
 - (void)lt_evaluateJavaScript:(nonnull NSString *)javaScriptString completionHandler:(void (^ __nullable)(__nullable id response, NSError * __nullable error))completionHandler;
 
-@property(nonatomic,assign) BOOL preLoad;
 @end
 
 @protocol LTWebViewDelegate <NSObject>

@@ -28,6 +28,24 @@
     return item;
 }
 
++(UIBarButtonItem *)LT_itemImage:(UIImage *)image
+                  highlight:(UIImage *)imageH
+                     target:(NSObject *)target
+                        sel:(SEL)sel{
+    
+    UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 30)];
+    //    btn.backgroundColor = [UIColor blackColor];
+    
+    [btn setImage:image
+         forState:UIControlStateNormal];
+    //    [btn setImage:[UIImage imageNamed:imageNameH]
+    //                   forState:UIControlStateHighlighted];
+    [btn addTarget:target action:sel forControlEvents:UIControlEventTouchUpInside];
+    [btn sizeToFit];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:btn];
+    return item;
+}
+
 +(UIBarButtonItem *)LT_item:(NSString *)title
                    color:(UIColor *)titleColor
                   target:(NSObject *)target

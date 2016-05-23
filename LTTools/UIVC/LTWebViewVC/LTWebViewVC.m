@@ -25,7 +25,7 @@
     ltwebView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:ltwebView];
     
-    [ltwebView lt_loadUrl:@"http://localhost:63342/Dangmian/www/demo/test.html"];
+    [ltwebView lt_loadUrl:@"http://192.168.2.1:63342/Dangmian/www/demo/test.html"];
 }
 
 #pragma mark LTWebViewDelegate

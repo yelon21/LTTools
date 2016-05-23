@@ -85,6 +85,12 @@
 			<key>class</key>
 			<string>LTWebViewVC</string>
 		</dict>
+		<dict>
+			<key>title</key>
+			<string>DemoWebViewController</string>
+			<key>class</key>
+			<string>DemoWebViewController</string>
+		</dict>
 	</array>
 </dict>
 </plist>

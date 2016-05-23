@@ -8,17 +8,17 @@
 
 #import "NSString+LTJson.h"
 
-@implementation NSString (LTJson)
+@implementation NSData (LTJson)
 
 - (id)lt_jsonObject{
-
+    
     if (!self) {
         
         return nil;
     }
     
     NSError *error = nil;
-    id result = [NSJSONSerialization JSONObjectWithData:[self dataUsingEncoding:NSUTF8StringEncoding]
+    id result = [NSJSONSerialization JSONObjectWithData:self
                                                 options:NSJSONReadingMutableContainers
                                                   error:&error];
     if (error) {
@@ -30,6 +30,21 @@
 }
 @end
 
+@implementation NSString (LTJson)
+
+- (id)lt_jsonObject{
+
+    if (!self) {
+        
+        return nil;
+    }
+    
+    NSData *data = [self dataUsingEncoding:NSUTF8StringEncoding];
+
+    return [data lt_jsonObject];
+}
+@end
+
 @implementation NSDictionary (LTJson)
 
 - (NSString *)lt_jsonString{
@@ -38,7 +53,6 @@
         
         return nil;
     }
-    
     
     NSError *error = nil;
     NSData *result = [NSJSONSerialization dataWithJSONObject:self

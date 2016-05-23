@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+@interface NSData (LTJson)
+
+- (id)lt_jsonObject;
+
+@end
+
 @interface NSString (LTJson)
 
 - (id)lt_jsonObject;

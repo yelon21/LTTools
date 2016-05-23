@@ -15,25 +15,35 @@
 @property(nonatomic,readwrite,strong,nullable) NSString *title;
 
 @property(nonatomic,strong) UIScrollView *rootScrollView;
+@property(nonatomic,assign) BOOL preLoad;
 @end
 
 @implementation LTWebView
 
 -(instancetype)init{
-
+    
     if (self = [self initWithFrame:CGRectZero]) {
         
     }
     return self;
 }
+-(instancetype)initWithFrame:(CGRect)frame {
 
--(instancetype)initWithFrame:(CGRect)frame{
+    return [self initWithFrame:frame preLoad:NO];
+}
 
+-(instancetype)initWithFrame:(CGRect)frame preLoad:(BOOL)preLoad{
+    
     if (self = [super initWithFrame:frame]) {
         
-        self.rootScrollView = [[UIScrollView alloc]initWithFrame:self.bounds];
-        [self addSubview:self.rootScrollView];
-        [self.rootScrollView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
+        self.preLoad = preLoad;
+        
+        if (self.preLoad) {
+            
+            self.rootScrollView = [[UIScrollView alloc]initWithFrame:self.bounds];
+            [self addSubview:self.rootScrollView];
+            [self.rootScrollView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
+        }
         
         self.title = @"";
         Class wkClass = NSClassFromString(@"WKWebView");
@@ -42,7 +52,7 @@
             [self initWKWebView];
         }
         else{
-        
+            
             _isWKWebView = NO;
             [self initUIWebView];
         }
@@ -50,7 +60,7 @@
     return self;
 }
 -(void)setBackgroundColor:(UIColor *)backgroundColor{
-
+    
     [super setBackgroundColor:backgroundColor];
     
     if (self.isWKWebView) {
@@ -76,7 +86,11 @@
     self.webViewWK.UIDelegate = self;
     self.webViewWK.navigationDelegate = self;
     
-    [self.rootScrollView addSubview:self.webViewWK];
+    UIView *superView = self;
+    if (self.rootScrollView) {
+        superView = self.rootScrollView;
+    }
+    [superView addSubview:self.webViewWK];
     self.webViewWK.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     self.webViewWK.scrollView.bounces = YES;
 }
@@ -85,7 +99,11 @@
     
     self.webViewUI = [[UIWebView alloc]initWithFrame:self.bounds];
     self.webViewUI.delegate = self;
-    [self.rootScrollView addSubview:self.webViewUI];
+    UIView *superView = self;
+    if (self.rootScrollView) {
+        superView = self.rootScrollView;
+    }
+    [superView addSubview:self.webViewUI];
     self.webViewUI.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     self.webViewUI.scrollView.bounces = YES;
 }
@@ -216,7 +234,7 @@
     
     if (self.isWKWebView) {
         
-        [self.webViewWK reload];
+        [self.webViewWK reloadFromOrigin];
     }
     else{
         
@@ -259,7 +277,7 @@
 }
 //
 -(void)lt_evaluateJavaScript:(NSString *)javaScriptString completionHandler:(void (^)(id _Nullable data, NSError * _Nullable))completionHandler{
-
+    
     if (self.isWKWebView) {
         
         [self.webViewWK evaluateJavaScript:javaScriptString
@@ -289,7 +307,7 @@
         [self.delegate ltwebViewDidFinishLoad:self];
     }
     
-    if (self.preLoad) {
+    if (self.rootScrollView&&self.preLoad) {
         
         __weak typeof(self)weakSelf = self;
         [self lt_evaluateJavaScript:@"document.body.scrollHeight" completionHandler:^(id  _Nullable response, NSError * _Nullable error) {
@@ -479,15 +497,16 @@
 
 - (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler{
     
+    NSLog(@"message=%@",message);
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
                                                                    message:message
                                                             preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        
+    
         completionHandler();
     }];
-
+    
     [alert addAction:action];
     
     UIViewController *viewCon = (UIViewController *)self.delegate;
@@ -495,7 +514,14 @@
         
         viewCon = [UIApplication sharedApplication].keyWindow.rootViewController;
     }
-    [viewCon presentViewController:alert animated:YES completion:nil];
+    if (viewCon.presentedViewController) {
+        
+        completionHandler();
+    }
+    else{
+    
+        [viewCon presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 /*! @abstract 显示js confirm
